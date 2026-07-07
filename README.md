@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NeuroShine — Public Marketing Website
 
-## Getting Started
+> **Bringing out the best in every mind.**
+> The public, SEO-optimized marketing site for the NeuroShine child-development
+> therapy clinic.
 
-First, run the development server:
+Built with **Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS v4 ·
+Framer Motion · ShadCN UI**.
+
+## 🏛️ Where this fits (hybrid architecture)
+
+NeuroShine runs as three coordinated projects:
+
+| Project | Tech | Role |
+|---------|------|------|
+| **`neuroshine-web`** (this repo) | Next.js | **Public marketing site** (SEO) + a thin server-side proxy for forms |
+| `neuroshine_app` | Flutter (Web + Mobile) | Authenticated **portals + admin** |
+| `neuroshine-backend` | Spring Boot + MySQL | Shared **API + JWT auth + email** for both |
+
+This site is **public only** — there is no login, admin or database here. Forms
+(contact, appointment, newsletter, careers) are validated and rate-limited at
+the edge, then **proxied server-side to the Spring Boot backend**, which persists
+the data and sends email. That keeps the marketing pages fully static/SSR for
+**SEO**, with the backend URL and key never exposed to the browser.
+
+## ✨ Features
+
+- **Marketing pages** — home, about, 18 service pages, 7 assessments,
+  therapists, blog (search + categories), resources, success stories, gallery,
+  careers, contact, appointment, legal.
+- **SEO** — dynamic metadata, Open Graph/Twitter, JSON-LD (LocalBusiness, FAQ,
+  Breadcrumb, Article), `sitemap.xml`, `robots.txt`, PWA manifest.
+- **A11y & UX** — WCAG-minded, keyboard nav, dark mode, reduced-motion support,
+  glassmorphism, scroll animations, WhatsApp button, cookie consent, back-to-top.
+- **Forms** — React Hook Form + Zod, proxied to Spring Boot.
+
+## 🚀 Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local     # set SPRING_API_URL (+ FORM_API_KEY in prod)
+npm run dev                    # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The public site renders fully without the backend; form **submissions** need the
+Spring Boot backend running (default `http://localhost:8080`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# backend (separate repo)
+cd ../neuroshine-backend && ./mvnw spring-boot:run
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📜 Scripts
 
-## Learn More
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Dev server |
+| `npm run build` | Production build |
+| `npm run start` | Serve production build |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | `tsc --noEmit` |
 
-To learn more about Next.js, take a look at the following resources:
+## 🗂️ Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+See **[PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md)**. In short:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+├── app/(marketing)/  # all public pages (route group)
+├── app/api/          # form proxies → Spring Boot (contact/appointments/newsletter/careers/reviews)
+├── components/       # ui (ShadCN) · layout · sections · shared · forms · seo · providers
+├── content/          # type-safe content (services, assessments, therapists, blog…)
+├── lib/              # api/spring · validations (Zod) · rate-limit · seo · utils
+└── config/           # site + navigation
+```
 
-## Deploy on Vercel
+## 🔧 Configuration
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Clinic identity (name, tagline, contact, address, hours, socials) lives in
+**`src/config/site.ts`** — update it with the real clinic details.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🚢 Deploy
+
+See **[DEPLOYMENT.md](./DEPLOYMENT.md)** (Vercel + pointing at the Spring Boot backend).
+
+## 📄 License
+
+Proprietary — © NeuroShine Child Development Centre.
