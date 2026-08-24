@@ -8,7 +8,7 @@ export const siteConfig = {
   tagline: "Bringing out the best in every mind",
   description:
     "Neuroshine Therapy Centre is a leading pediatric therapy and child development clinic in Indirapuram, Ghaziabad, dedicated to helping children achieve their full potential. We provide evidence-based Occupational Therapy, Speech Therapy, ABA Therapy, Special Education, Sensory Integration Therapy, Autism Therapy, ADHD support, developmental assessments, and individualized intervention programs. Our experienced therapists create personalized treatment plans to improve communication, motor skills, sensory processing, learning, behavior, and independence in a caring and child-friendly environment. Book your consultation today and begin your child's journey toward confident growth and development.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://neuroshine.in",
   ogImage: "/images/og/og-default.jpeg",
   logo: "/images/logo.jpeg",
   locale: "en_IN",
