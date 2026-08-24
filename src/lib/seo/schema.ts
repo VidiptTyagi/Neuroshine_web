@@ -43,7 +43,7 @@ export function localBusinessSchema(site: SiteConfig = siteConfig) {
         "@type": "OpeningHoursSpecification",
         dayOfWeek: "Saturday",
         opens: "09:00",
-        closes: "17:00",
+        closes: "16:00",
       },
     ],
     sameAs: Object.values(socials),

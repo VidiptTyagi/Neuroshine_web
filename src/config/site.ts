@@ -18,8 +18,8 @@ export const siteConfig = {
     phoneHref: "tel:+918700263187",
     whatsapp: "918700263187",
     whatsappHref: "https://wa.me/918700263187",
-    email: "neuroshine.officialclinic@gmail.com",
-    emailHref: "mailto:neuroshine.officialclinic@gmail.com",
+    email: "neuroshinecdc@gmail.com",
+    emailHref: "mailto:neuroshinecdc@gmail.com",
     emergency: "+91 8368965507",
   },
 
