@@ -8,7 +8,6 @@ import {
   Facebook,
   Instagram,
   Youtube,
-  Linkedin,
 } from "lucide-react";
 import { getSite } from "@/lib/site";
 import { footerNav } from "@/config/navigation";
@@ -24,7 +23,6 @@ export async function Footer() {
     { icon: Facebook, href: siteConfig.socials.facebook, label: "Facebook" },
     { icon: Instagram, href: siteConfig.socials.instagram, label: "Instagram" },
     { icon: Youtube, href: siteConfig.socials.youtube, label: "YouTube" },
-    { icon: Linkedin, href: siteConfig.socials.linkedin, label: "LinkedIn" },
   ];
 
   return (

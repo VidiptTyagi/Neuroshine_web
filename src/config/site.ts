@@ -45,8 +45,6 @@ export const siteConfig = {
     facebook: "https://www.facebook.com/share/1BS4eMX37A/?mibextid=wwXIfr",
     instagram: "https://www.instagram.com/neuroshine_care",
     youtube: "https://www.youtube.com/@Neuro_shine",
-    linkedin: "https://linkedin.com/company/neuroshine",
-    twitter: "https://twitter.com/neuroshine",
   },
 };
 
