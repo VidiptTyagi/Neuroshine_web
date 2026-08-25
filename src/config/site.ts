@@ -29,8 +29,9 @@ export const siteConfig = {
     region: "Uttar Pradesh",
     postalCode: "201014",
     country: "IN",
-    // Exact pin for the embedded map — a bare name search lands anywhere.
-    mapQuery: "28.645188,77.376437",
+    // Exact pin plus a marker label — a bare name search lands anywhere, and
+    // coordinates alone leave the pin unlabelled.
+    mapQuery: "28.645188,77.376437 (Neuroshine)",
     // Plus Code 7JWVJ9WG+3H (J9WG+3H Ghaziabad).
     lat: 28.645188,
     lng: 77.376437,
