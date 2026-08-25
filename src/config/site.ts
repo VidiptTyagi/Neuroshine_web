@@ -29,10 +29,11 @@ export const siteConfig = {
     region: "Uttar Pradesh",
     postalCode: "201014",
     country: "IN",
-    mapQuery: "Neuroshine",
-    // Placeholder coordinates — update with the clinic's real location.
-    lat: 28.6139,
-    lng: 77.209,
+    // Exact pin for the embedded map — a bare name search lands anywhere.
+    mapQuery: "28.645188,77.376437",
+    // Plus Code 7JWVJ9WG+3H (J9WG+3H Ghaziabad).
+    lat: 28.645188,
+    lng: 77.376437,
   },
 
   hours: [
