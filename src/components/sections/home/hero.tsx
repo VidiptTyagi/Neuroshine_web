@@ -132,7 +132,7 @@ export function HomeHero() {
               <p className="text-xs text-muted-foreground">Children helped</p>
             </div>
             <div className="glass-strong animate-float-slow absolute -bottom-3 -right-2 hidden rounded-2xl px-4 py-3 sm:block">
-              <p className="text-2xl font-extrabold brand-gradient-text">5+</p>
+              <p className="text-2xl font-extrabold brand-gradient-text">2+</p>
               <p className="text-xs text-muted-foreground">Certified experts</p>
             </div>
             <div className="glass-strong animate-float absolute -right-3 top-1/3 hidden rounded-2xl px-3 py-2 md:block [animation-delay:1.5s]">

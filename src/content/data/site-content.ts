@@ -99,7 +99,7 @@ export const timeline: TimelineEvent[] = [
 export const achievements = [
   //{ icon: Award, label: "Best Child Development Centre 2025" },
   { icon: Star, label: "4.9/5 average parent rating" },
-  { icon: Users, label: "5+ certified specialists" },
+  { icon: Users, label: "2+ certified specialists" },
   { icon: HeartHandshake, label: "50+ families supported" },
 ];
 
