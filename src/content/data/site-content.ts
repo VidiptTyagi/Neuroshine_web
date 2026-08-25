@@ -93,14 +93,14 @@ export const coreValues: CoreValue[] = [
 export const timeline: TimelineEvent[] = [
   { year: "2024", title: "NeuroShine is Born", description: "Founded by Dr. Garima Tyagi with a single therapy room and a big vision." },
   { year: "2025", title: "Multidisciplinary Team", description: "Expanded to a full team across speech, OT, psychology and special education." },
-  { year: "2026", title: "1,00+ Children Supported", description: "Celebrated a milestone of empowering over a thousand young minds." },
+  { year: "2026", title: "50+ Children Supported", description: "Celebrated a milestone of empowering 50+ young minds." },
 ];
 
 export const achievements = [
   //{ icon: Award, label: "Best Child Development Centre 2025" },
   { icon: Star, label: "4.9/5 average parent rating" },
   { icon: Users, label: "5+ certified specialists" },
-  { icon: HeartHandshake, label: "100+ families supported" },
+  { icon: HeartHandshake, label: "50+ families supported" },
 ];
 
 export const certifications = [

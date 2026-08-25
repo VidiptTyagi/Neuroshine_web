@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 const trustBadges = [
   "Certified therapists",
   "Family-centred care",
-  "12+ years of trust",
+  "1+ year of trust",
 ];
 
 export function HomeHero() {
@@ -100,7 +100,7 @@ export function HomeHero() {
                     ))}
                   </div>
                   <p className="text-muted-foreground">
-                    Loved by <strong className="text-foreground">100+</strong> parents
+                    Loved by <strong className="text-foreground">50+</strong> parents
                   </p>
                 </div>
               </div>
@@ -128,7 +128,7 @@ export function HomeHero() {
 
             {/* Floating stat chips */}
             <div className="glass-strong animate-float absolute -left-3 top-10 hidden rounded-2xl px-4 py-3 sm:block">
-              <p className="text-2xl font-extrabold text-primary">100+</p>
+              <p className="text-2xl font-extrabold text-primary">50+</p>
               <p className="text-xs text-muted-foreground">Children helped</p>
             </div>
             <div className="glass-strong animate-float-slow absolute -bottom-3 -right-2 hidden rounded-2xl px-4 py-3 sm:block">

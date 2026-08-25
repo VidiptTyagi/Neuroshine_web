@@ -20,7 +20,7 @@ import {
 export const metadata: Metadata = buildMetadata({
   title: "About Us",
   description:
-    "Learn about NeuroShine's mission, values and story — a compassionate child-development centre empowering every mind and every child since 2013.",
+    "Learn about NeuroShine's mission, values and story — a compassionate child-development centre empowering every mind and every child since 2024.",
   path: "/about",
 });
 
@@ -30,7 +30,7 @@ export default function AboutPage() {
       <PageHeader
         eyebrow="About NeuroShine"
         title="Compassionate care, backed by science"
-        description="Since 2013, we've helped children reach their full potential through evidence-based therapy delivered with genuine warmth."
+        description="Since 2024, we've helped children reach their full potential through evidence-based therapy delivered with genuine warmth."
         crumbs={[
           { name: "Home", path: "/" },
           { name: "About", path: "/about" },
@@ -83,10 +83,10 @@ export default function AboutPage() {
           />
           <div className="mt-6 space-y-4 text-muted-foreground">
             <p>
-              NeuroShine began in 2013 with a single therapy room, one dedicated
+              NeuroShine began in 2024 with a single therapy room, one dedicated
               psychologist and a simple belief: that every child deserves the
               chance to shine. What started as a small practice has grown into a
-              multidisciplinary centre trusted by over a thousand families.
+              multidisciplinary centre trusted by 50+ families.
             </p>
             <p>
               Along the way, our commitment has never changed. We combine clinical
