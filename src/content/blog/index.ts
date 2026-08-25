@@ -8,7 +8,7 @@ export const blogPosts: BlogPost[] = [
       "A practical, age-by-age guide to communication milestones — and gentle signs it may be time to seek support.",
     category: "Speech Therapy",
     tags: ["speech", "milestones", "early years"],
-    author: "Rhea Menon",
+    author: "Vikash Kumar",
     date: "2025-11-12",
     readingMinutes: 6,
     content: [
@@ -26,7 +26,7 @@ export const blogPosts: BlogPost[] = [
       "Why some children cover their ears at parties or avoid messy play — and how sensory strategies help.",
     category: "Occupational Therapy",
     tags: ["sensory", "occupational therapy", "regulation"],
-    author: "Arjun Nair",
+    author: "Dr. Garima Tyagi",
     date: "2025-10-28",
     readingMinutes: 7,
     content: [
@@ -44,7 +44,7 @@ export const blogPosts: BlogPost[] = [
       "A diagnosis is a beginning, not a limit. Here's how to move forward with confidence and hope.",
     category: "Autism",
     tags: ["autism", "parenting", "early intervention"],
-    author: "Dr. Ananya Sharma",
+    author: "Dr. Garima Tyagi",
     date: "2025-09-15",
     readingMinutes: 8,
     content: [
@@ -62,7 +62,7 @@ export const blogPosts: BlogPost[] = [
       "Simple, playful activities that build the hand strength and control behind neat handwriting.",
     category: "Occupational Therapy",
     tags: ["handwriting", "fine motor", "home activities"],
-    author: "Arjun Nair",
+    author: "Dr. Garima Tyagi",
     date: "2025-08-20",
     readingMinutes: 5,
     content: [
@@ -81,7 +81,7 @@ export const blogPosts: BlogPost[] = [
       "Friendship is a skill — and play is the best place to learn it. Here's how group therapy helps.",
     category: "Child Development",
     tags: ["social skills", "group therapy", "play"],
-    author: "Meera Iyer",
+    author: "Vikash Kumar",
     date: "2025-07-30",
     readingMinutes: 6,
     content: [
@@ -99,7 +99,7 @@ export const blogPosts: BlogPost[] = [
       "The science of the developing brain — and why timely support has such a lasting impact.",
     category: "Early Intervention",
     tags: ["early intervention", "development", "brain"],
-    author: "Dr. Ananya Sharma",
+    author: "Vikash Kumar",
     date: "2025-06-18",
     readingMinutes: 7,
     content: [

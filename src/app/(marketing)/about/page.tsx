@@ -165,9 +165,9 @@ export default function AboutPage() {
                   believing in what they can achieve.”
                 </blockquote>
                 <div className="mt-6">
-                  <p className="font-semibold">Dr. Ananya Sharma</p>
+                  <p className="font-semibold">Dr. Garima Tyagi</p>
                   <p className="text-sm text-muted-foreground">
-                    Founder & Clinical Director
+                    Founder & Occupational Therapist
                   </p>
                 </div>
               </CardContent>
