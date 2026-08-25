@@ -25,9 +25,12 @@ export const metadata: Metadata = buildMetadata({
 
 export default async function ContactPage() {
   const siteConfig = await getSite();
-  const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(
-    siteConfig.address.mapQuery,
-  )}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
+  // `q` matches the Business Profile listing; `ll` keeps the viewport on the
+  // clinic even if the name lookup ever comes back empty.
+  const { mapQuery, lat, lng } = siteConfig.address;
+  const mapSrc =
+    `https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}` +
+    `&ll=${lat},${lng}&t=&z=17&ie=UTF8&iwloc=&output=embed`;
 
   const info = [
     {

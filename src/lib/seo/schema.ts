@@ -37,7 +37,7 @@ export function localBusinessSchema(site: SiteConfig = siteConfig) {
         "@type": "OpeningHoursSpecification",
         dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
         opens: "09:00",
-        closes: "19:00",
+        closes: "18:00",
       },
       {
         "@type": "OpeningHoursSpecification",
@@ -46,6 +46,7 @@ export function localBusinessSchema(site: SiteConfig = siteConfig) {
         closes: "16:00",
       },
     ],
+    hasMap: address.mapUrl,
     sameAs: Object.values(socials),
     medicalSpecialty: [
       "Pediatrics",
