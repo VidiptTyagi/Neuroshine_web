@@ -43,7 +43,7 @@ export const siteConfig = {
   ],
 
   socials: {
-    facebook: "https://www.facebook.com/share/1BS4eMX37A/?mibextid=wwXIfr",
+    facebook: "https://www.facebook.com/share/1HX4ueQ24h/",
     instagram: "https://www.instagram.com/neuroshine_care",
     youtube: "https://www.youtube.com/@Neuro_shine",
   },
