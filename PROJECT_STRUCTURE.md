@@ -1,10 +1,10 @@
 # NeuroShine Web — Project Structure
 
 **Tagline:** _Bringing out the best in every mind_
-**Role:** Public, SEO-optimized **marketing website** (part of a hybrid system —
-the Flutter app handles portals/admin; Spring Boot is the shared backend).
+**Role:** Public, SEO-optimized **marketing website** — standalone and
+database-less. No auth, no admin, no backend.
 **Stack:** Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS v4 ·
-Framer Motion · ShadCN UI · Lucide · React Hook Form + Zod · Google Maps · Vercel
+Framer Motion · ShadCN UI · Lucide · React Hook Form + Zod · Resend · Vercel
 
 > Route groups `( )` do **not** affect the URL — they only share a layout.
 
@@ -32,12 +32,11 @@ neuroshine-web/
 │   │   │   ├── contact/            form + Google Maps
 │   │   │   └── privacy-policy/  terms/
 │   │   │
-│   │   └── api/                    ── FORM PROXIES → Spring Boot (server-side, BFF)
-│   │       ├── contact/            Zod + rate-limit → springPostJson('/api/contact')
-│   │       ├── appointments/       → '/api/appointments'
-│   │       ├── newsletter/         → '/api/newsletter'
-│   │       ├── careers/            multipart forward → '/api/careers'
-│   │       └── reviews/            GET proxy → '/api/reviews'
+│   │   └── api/                    ── FORM HANDLERS → Resend (server-side)
+│   │       ├── contact/            Zod + rate-limit → clinic mail + visitor receipt
+│   │       ├── appointments/       same shape
+│   │       ├── newsletter/         same shape
+│   │       └── careers/            same shape, with resume metadata
 │   │
 │   ├── components/
 │   │   ├── ui/            ShadCN primitives
@@ -56,7 +55,7 @@ neuroshine-web/
 │   │   └── data/          site-content (stats, testimonials, faqs, values…) + misc (jobs, gallery…)
 │   │
 │   ├── lib/
-│   │   ├── api/spring.ts  Server-only Spring Boot client (SPRING_API_URL + X-Api-Key)
+│   │   ├── email/         Server-only Resend client + HTML templates
 │   │   ├── validations/   Zod schemas (appointment, contact, newsletter, career)
 │   │   ├── rate-limit.ts  In-memory limiter · api-response.ts  JSON helpers
 │   │   ├── seo/           buildMetadata + JSON-LD builders
@@ -65,17 +64,19 @@ neuroshine-web/
 │   ├── config/           site.ts (brand/contact/hours/socials) · navigation.ts
 │   └── types/            shared content types
 │
-├── .env.example          SPRING_API_URL, FORM_API_KEY, SITE_URL, Maps, GA, GSC
+├── .env.example          SITE_URL, Resend (key/from/notify), GA, GSC
 ├── README.md  DEPLOYMENT.md
 └── next.config / tailwind / tsconfig / eslint / components.json
 ```
 
 ## How data flows (SEO-safe)
 - **Marketing content** is static/SSG from `src/content/*` → full HTML for crawlers.
-- **Forms** POST to `src/app/api/*` → validated (Zod) + rate-limited → **proxied
-  server-side** to Spring Boot (which persists to MySQL + emails via Resend).
-- The browser never sees the backend URL or the form key.
+- **Forms** POST to `src/app/api/*` → validated (Zod) + rate-limited → emailed via
+  **Resend**. Nothing is persisted.
+- Each submission sends **two** mails: the clinic notification (required — the
+  request fails if it cannot send) and a best-effort receipt to the visitor.
+- `RESEND_API_KEY` is server-only and never reaches the browser.
 
-## Not in this project (moved elsewhere)
-Auth, patient/parent portals, admin/CMS, and the database live in the **Flutter
-app** (`neuroshine_app`) + **Spring Boot backend** (`neuroshine-backend`).
+## Not in this project
+No auth, no patient/parent portal, no admin/CMS, no database. This repo is the
+public marketing site and nothing else.
