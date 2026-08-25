@@ -23,6 +23,28 @@ import { MobileNav } from "./mobile-nav";
 export function Navbar() {
   const { scrolled } = useScrollPosition(8);
   const pathname = usePathname();
+  // Controlled so the mega-menu opens on click rather than on hover.
+  const [openMenu, setOpenMenu] = React.useState("");
+
+  // A link inside the menu navigates without closing it, which would leave the
+  // page scroll-locked on the new route.
+  React.useEffect(() => setOpenMenu(""), [pathname]);
+
+  // While the mega-menu is open the page behind it must not scroll. Pad for the
+  // scrollbar so the layout doesn't jump as it disappears.
+  React.useEffect(() => {
+    if (!openMenu) return;
+    const { body } = document;
+    const gutter = window.innerWidth - document.documentElement.clientWidth;
+    const prevOverflow = body.style.overflow;
+    const prevPadding = body.style.paddingRight;
+    body.style.overflow = "hidden";
+    if (gutter > 0) body.style.paddingRight = `${gutter}px`;
+    return () => {
+      body.style.overflow = prevOverflow;
+      body.style.paddingRight = prevPadding;
+    };
+  }, [openMenu]);
 
   return (
     <header
@@ -43,10 +65,19 @@ export function Navbar() {
 
         {/* Desktop navigation — grows to fill and stays centered.
             Shown at xl+; below that the tidy hamburger drawer is used. */}
-        <NavigationMenu className="hidden max-w-none flex-1 justify-center xl:flex">
+        <NavigationMenu
+          value={openMenu}
+          onValueChange={setOpenMenu}
+          className="hidden max-w-none flex-1 justify-center xl:flex"
+        >
           <NavigationMenuList>
             {mainNav.map((item) => (
-              <DesktopNavItem key={item.title} item={item} pathname={pathname} />
+              <DesktopNavItem
+                key={item.title}
+                item={item}
+                pathname={pathname}
+                onNavigate={() => setOpenMenu("")}
+              />
             ))}
           </NavigationMenuList>
         </NavigationMenu>
@@ -70,9 +101,11 @@ export function Navbar() {
 function DesktopNavItem({
   item,
   pathname,
+  onNavigate,
 }: {
   item: NavItem;
   pathname: string;
+  onNavigate: () => void;
 }) {
   if (!item.children) {
     const active =
@@ -98,11 +131,23 @@ function DesktopNavItem({
 
   return (
     <NavigationMenuItem>
-      <NavigationMenuTrigger className="rounded-full bg-transparent text-sm font-medium">
+      {/* Radix opens this on hover by default. Swallowing the pointer events it
+          listens for leaves the trigger's own click handling as the only way in
+          or out, so the menu behaves like a button. */}
+      <NavigationMenuTrigger
+        className="rounded-full bg-transparent text-sm font-medium"
+        onPointerMove={(e) => e.preventDefault()}
+        onPointerLeave={(e) => e.preventDefault()}
+      >
         {item.title}
       </NavigationMenuTrigger>
-      <NavigationMenuContent>
-        <ul className="grid w-[min(90vw,44rem)] grid-cols-2 gap-1 p-3">
+      <NavigationMenuContent
+        onPointerEnter={(e) => e.preventDefault()}
+        onPointerLeave={(e) => e.preventDefault()}
+      >
+        {/* Services lists 18 items; keep a tall panel inside its own scroll area
+            instead of letting it run past the viewport. */}
+        <ul className="grid max-h-[calc(100vh-8rem)] w-[min(90vw,44rem)] grid-cols-2 gap-1 overflow-y-auto overscroll-contain p-3">
           {item.children.map((link) => {
             const Icon = link.icon;
             return (
@@ -110,6 +155,7 @@ function DesktopNavItem({
                 <NavigationMenuLink asChild>
                   <Link
                     href={link.href}
+                    onClick={onNavigate}
                     className="flex gap-3 rounded-xl p-3 leading-none no-underline transition-colors hover:bg-accent/10 focus:bg-accent/10"
                   >
                     {Icon ? (
