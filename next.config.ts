@@ -14,6 +14,18 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "i.ytimg.com" },
     ],
   },
+  async redirects() {
+    return [
+      // Canonical host: www.* permanently redirects to the bare domain, which is
+      // what NEXT_PUBLIC_SITE_URL, canonical tags and the sitemap all point at.
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.neuroshine.in" }],
+        destination: "https://neuroshine.in/:path*",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {
