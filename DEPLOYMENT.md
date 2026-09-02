@@ -1,7 +1,14 @@
 # Deployment — NeuroShine public website
 
-Live at **https://neuroshine.in**, hosted on **Vercel** (project `neuroshine-web`,
-deployed from `main`, region `bom1`/Mumbai).
+Live at **https://neuroshine.in**, self-hosted as a Node process (Next.js
+`output: "standalone"`) under systemd on the same Lightsail box as
+`neuroshine-backend` — see `neuroshine-backend/deploy/README.md` §2.8 for the
+server side, `deploy/deploy-website.sh` in this repo for shipping a build.
+
+**DNS stays where it already is — Vercel's nameservers** — only the hosting
+moved off Vercel. The domain is registered through HostingRaja, but its DNS
+zone lives at Vercel (see §3); that didn't change, only what the root A
+record points at.
 
 The site is **database-less**. All content is static and lives in `src/content/`
 and `src/config/site.ts`; the four forms (contact, appointment, careers,
@@ -12,25 +19,29 @@ database to deploy.
 
 ## 1. Environment variables
 
-Set these in Vercel → Settings → Environment Variables. `.env.example` is the
-template for local work.
+Two different places now, because build-time and runtime vars go to
+different machines:
 
-| Variable | Required | Value |
-|---|---|---|
-| `NEXT_PUBLIC_SITE_URL` | ✅ | `https://neuroshine.in` — no `www`, no trailing slash |
-| `RESEND_API_KEY` | ✅ | From [resend.com](https://resend.com). **Without it every form silently succeeds and sends nothing** (see `src/lib/email/resend.ts`) |
-| `RESEND_FROM_EMAIL` | ✅ | `NeuroShine <noreply@neuroshine.in>` — the domain must be verified in Resend |
-| `CONTACT_NOTIFY_EMAIL` | ✅ | `neuroshinecdc@gmail.com` — where enquiries land |
-| `NEXT_PUBLIC_GSC_VERIFICATION` | optional | Search Console HTML-tag token. Only needed if verifying by meta tag; the live property is verified by DNS instead |
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | optional | `G-XXXXXXXXXX` |
-| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | unused | The contact map is a keyless iframe embed. Nothing reads this today |
+| Variable | Required | Where | Value |
+|---|---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | ✅ | build machine, `.env.production.local` | `https://neuroshine.in` — no `www`, no trailing slash |
+| `NEXT_PUBLIC_GSC_VERIFICATION` | optional | build machine | Search Console HTML-tag token; the live property is verified by DNS instead |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | optional | build machine | `G-XXXXXXXXXX` |
+| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | unused | build machine | The contact map is a keyless iframe embed. Nothing reads this today |
+| `RESEND_API_KEY` | ✅ | server, `/etc/neuroshine-website/website.env` | From [resend.com](https://resend.com). **Without it every form silently succeeds and sends nothing** (see `src/lib/email/resend.ts`) |
+| `RESEND_FROM_EMAIL` | ✅ | server | `NeuroShine <noreply@neuroshine.in>` — the domain must be verified in Resend |
+| `CONTACT_NOTIFY_EMAIL` | ✅ | server | `neuroshinecdc@gmail.com` — where enquiries land |
+
+`.env.example` is the template for local work; `deploy/website.env.example`
+is the template for the server file.
 
 ### `NEXT_PUBLIC_*` values are baked in at build time
 
-They are compiled into the bundle, not read at runtime. **Changing one has no
-effect until you redeploy**, and the redeploy must not reuse the build cache:
-
-> Deployments → latest → `⋯` → **Redeploy** → untick **"Use existing Build Cache"**
+They are compiled into the bundle, not read at runtime — which now matters
+more than it used to: `deploy-website.sh` builds **on your laptop or in CI**,
+so `.env.production.local` (gitignored) must be correct *before* running it.
+There is no dashboard redeploy step to fix a wrong value after the fact
+anymore — you rebuild and re-run `deploy-website.sh`.
 
 `NEXT_PUBLIC_SITE_URL` in particular drives the canonical tag, `og:url`,
 `robots.txt` and every URL in the sitemap. If it is wrong, Google indexes the
@@ -40,13 +51,16 @@ wrong hostname.
 
 ## 2. Deploying
 
-Pushing to `main` deploys to production automatically. `vercel.json` pins the
-region and restricts auto-deploys to `main`.
-
 ```bash
-npm run typecheck && npm run build   # run both before pushing
-git push origin main
+npm run typecheck && npm run build   # sanity check locally first
+DEPLOY_HOST=<lightsail-static-ip> ./deploy/deploy-website.sh
 ```
+
+`deploy-website.sh` builds the standalone output, ships it over SSH, restarts
+`neuroshine-website.service`, health-checks `https://neuroshine.in`, and rolls
+back to the previous build if it doesn't come up — see
+`neuroshine-backend/deploy/README.md` §2.8 for the one-time server setup this
+depends on.
 
 Local production preview: `npm run build && npm run start` → http://localhost:3000
 
@@ -54,14 +68,43 @@ Local production preview: `npm run build && npm run start` → http://localhost:
 
 ## 3. DNS
 
-**Nameservers are Vercel's** (`ns1.vercel-dns.com`, `ns2.vercel-dns.com`), so add
-and edit every record in **Vercel → Domains → neuroshine.in → DNS Records**.
-Names there are *relative*: `send`, `resend._domainkey`, or blank for the root —
-never the full domain, never a trailing dot.
+**Nameservers stay Vercel's** (`ns1.vercel-dns.com`, `ns2.vercel-dns.com`) —
+moving hosting off Vercel does not need a nameserver change, just different
+records inside the same zone. Add and edit every record in
+**Vercel → Domains → neuroshine.in → DNS Records**. Names there are
+*relative*: `send`, `resend._domainkey`, or blank for the root — never the
+full domain, never a trailing dot.
 
 The domain is **registered** through HostingRaja (registrar: OVI Hosting Pvt
-Ltd). Only two things still happen there: renewal, and the nameserver
-delegation.
+Ltd). Only two things happen there: renewal, and the nameserver delegation —
+neither changes with this move.
+
+### Cutting over from Vercel hosting to Lightsail
+
+1. In the Lightsail console, note the instance's **static IP** (created in
+   `neuroshine-backend/deploy/README.md` §1.1).
+2. **Vercel → Domains → neuroshine.in → DNS Records**: change the root (`@`)
+   record from Vercel's own hosting entry to `A neuroshine.in → <static-ip>`,
+   and add `A www.neuroshine.in → <static-ip>` (or a `CNAME www → neuroshine.in`
+   — Vercel's own DNS, unlike HostingRaja's, allows CNAME).
+3. **Vercel → Project (`neuroshine-web`) → Settings → Domains**: remove
+   `neuroshine.in` / `www.neuroshine.in` from the project once the A records
+   above are live, so Vercel stops trying to serve them. Leave the *DNS zone*
+   (step 2) alone — that's a separate thing from the project's domain
+   assignment.
+4. Wait for propagation, then run certbot on the server (§2.8 of the backend
+   runbook) — it needs the A record resolving to this instance first.
+5. Verify before relying on it:
+
+   ```bash
+   dig +short neuroshine.in
+   dig +short www.neuroshine.in
+   ```
+
+The three Resend records (§4 below) and the Search Console TXT record (§5)
+are untouched by any of this — they don't point at a host, so cutting over
+hosting doesn't affect them, and staying on Vercel DNS is exactly what keeps
+DKIM working (see the HostingRaja caveat just below).
 
 ### If the delegation ever needs changing again
 

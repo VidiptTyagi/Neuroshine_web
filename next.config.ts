@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Self-hosted on the Lightsail box behind Nginx+systemd (see
+  // deploy/README.md §2.8) — standalone bundles a minimal node_modules so the
+  // deploy payload is small instead of shipping the whole workspace.
+  output: "standalone",
   reactStrictMode: true,
   poweredByHeader: false,
   images: {
